@@ -46,3 +46,24 @@ func goid() int64 {
 	}
 	return id
 }
+
+func TestPID(t *testing.T) {
+	n := int32(runtime.GOMAXPROCS(0))
+	got := PID()
+	if got < 0 || got >= n {
+		t.Fatalf("unexpected pid for main goroutine: got:%d want:0 < pid < %d", got, n)
+	}
+	var wg sync.WaitGroup
+	for i := 0; i < 1000000; i++ {
+		i := i
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			got := PID()
+			if got < 0 || got >= n {
+				t.Fatalf("unexpected pid for goroutine #%d: got:%d want:0 <= pid < %d", i, got, n)
+			}
+		}()
+	}
+	wg.Wait()
+}
