@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package goroutine provides a single function that will return the runtime's
-// ID number for the calling goroutine.
+// Package goroutine provides functions that will return the runtime's
+// ID number for the calling goroutine or its creator.
 //
 // The implementation is derived from Laevus Dexter's comment in Gophers' Slack #darkarts,
 // https://gophers.slack.com/archives/C1C1YSQBT/p1593885226448300 post which linked to
@@ -17,9 +17,14 @@ import (
 
 // ID returns the runtime ID of the calling goroutine.
 func ID() int64 {
-	return *(*int64)(add(getg(), goidoff))
+	return idOf(getg(), goidoff)
 }
 
+func idOf(g unsafe.Pointer, off uintptr) int64 {
+	return *(*int64)(add(g, off))
+}
+
+//go:nosplit
 func getg() unsafe.Pointer {
 	return *(*unsafe.Pointer)(add(getm(), curgoff))
 }
@@ -29,6 +34,7 @@ func getg() unsafe.Pointer {
 func add(p unsafe.Pointer, x uintptr) unsafe.Pointer
 
 //go:linkname getm runtime.getm
+//go:nosplit
 func getm() unsafe.Pointer
 
 var (
