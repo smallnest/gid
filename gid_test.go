@@ -48,7 +48,7 @@ func goid() int64 {
 }
 
 func TestPID(t *testing.T) {
-	n := int32(runtime.GOMAXPROCS(0))
+	n := runtime.GOMAXPROCS(0)
 	got := PID()
 	if got < 0 || got >= n {
 		t.Fatalf("unexpected pid for main goroutine: got:%d want:0 < pid < %d", got, n)

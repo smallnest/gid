@@ -29,30 +29,17 @@ func getg() unsafe.Pointer {
 	return *(*unsafe.Pointer)(add(getm(), curgoff))
 }
 
-type p struct {
-	id int32
-}
+//go:linkname runtime_procPin runtime.procPin
+func runtime_procPin() int
 
-type puintptr uintptr
-
-//go:nosplit
-func (pp puintptr) pid() int32 {
-	return *(*int32)(add(unsafe.Pointer(pp), pidoff))
-}
+//go:linkname runtime_procUnpin runtime.procUnpin
+func runtime_procUnpin() int
 
 // PID returns the "P" ID of the calling goroutine.
-func PID() int32 {
-	return getp().pid()
-}
-
-func pidOf(g unsafe.Pointer, off uintptr) int32 {
-	return *(*int32)(add(g, off))
-}
-
-//go:nosplit
-func getp() puintptr {
-	pp := (puintptr)(*(*unsafe.Pointer)(add(getm(), poff)))
-	return pp
+func PID() int {
+	pid := runtime_procPin()
+	runtime_procUnpin()
+	return pid
 }
 
 //go:linkname add runtime.add
@@ -66,9 +53,6 @@ func getm() unsafe.Pointer
 var (
 	curgoff = offset("*runtime.m", "curg")
 	goidoff = offset("*runtime.g", "goid")
-
-	poff   = offset("*runtime.m", "p")
-	pidoff = offset("*runtime.p", "id")
 )
 
 // offset returns the offset into typ for the given field.
