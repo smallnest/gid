@@ -1,6 +1,6 @@
-# goroutine identification
+# gid
 
-Package goroutine provides functions that will return the runtime's
+Package gid provides functions that will return the runtime's
 ID number for the calling goroutine or its creator.
 
 The implementation is derived from Laevus Dexter's comment in Gophers' Slack

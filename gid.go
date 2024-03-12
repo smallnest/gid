@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package goroutine provides functions that will return the runtime's
+// Package gid provides functions that will return the runtime's
 // ID number for the calling goroutine or its creator.
 //
 // The implementation is derived from Laevus Dexter's comment in Gophers' Slack #darkarts,
 // https://gophers.slack.com/archives/C1C1YSQBT/p1593885226448300 post which linked to
 // this playground snippet https://play.golang.org/p/CSOp9wyzydP.
-package goroutine
+package gid
 
 import (
 	"reflect"

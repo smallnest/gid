@@ -1,3 +1,3 @@
-module github.com/smallnest/goroutine
+module github.com/smallnest/gid
 
 go 1.14

@@ -5,7 +5,7 @@
 //go:build go1.21
 // +build go1.21
 
-package goroutine
+package gid
 
 import "unsafe"
 
